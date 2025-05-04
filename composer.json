@@ -1,4 +1,6 @@
 {
   "name": "yourname/php-aws-info",
-  "require": {}
+  "require": {
+    "aws/aws-sdk-php": "^3.343"
+  }
 }
