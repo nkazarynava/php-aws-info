@@ -1,10 +1,20 @@
 <?php
-function getAwsMetadata($path) {
-    $url = "http://169.254.169.254/latest/meta-data/" . $path;
-    $opts = ['http' => ['timeout' => 1]];
-    return @file_get_contents($url, false, stream_context_create($opts)) ?: 'Unavailable';
-}
+require 'vendor/autoload.php';
 
-function getRegionFromAz($az) {
-    return substr($az, 0, -1); // Strip the last character
+use Aws\Ec2Metadata\Ec2MetadataClient;
+
+function getAwsMetadataFromSdk() {
+    try {
+        $client = new Ec2MetadataClient();
+        $az = $client->getAvailabilityZone();
+        $region = substr($az, 0, -1);
+        return [
+            'region' => $region,
+            'availability_zone' => $az
+        ];
+    } catch (Exception $e) {
+        return [
+            'error' => 'Could not fetch metadata: ' . $e->getMessage()
+        ];
+    }
 }
