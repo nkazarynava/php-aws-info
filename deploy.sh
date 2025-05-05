@@ -1,13 +1,10 @@
 #!/bin/bash
 
 # Move to the app directory (change if needed)
-cd /var/www/html
 cd /var/www/html/info-app
-# Unzip the application
-unzip -o app.zip
 
 # Check if Composer is installed
-if ! command -v composer &> /dev/null; then
+if ! command -v php /usr/local/bin/composer &> /dev/null; then
     echo "Composer not found. Installing..."
     EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -24,6 +21,9 @@ if ! command -v composer &> /dev/null; then
 else
     echo "Composer already installed."
 fi
+cd /usr/local/bin
+sudo chmod +x composer
 
+cd /var/www/html/info-app
 # Run Composer install
-composer install --no-dev --optimize-autoloader
+php /usr/local/bin/composer install --no-dev --optimize-autoloader
