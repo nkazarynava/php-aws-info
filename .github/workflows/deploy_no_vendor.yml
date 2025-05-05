@@ -1,0 +1,22 @@
+name: Build ZIP for Linux Deploy (No Composer)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create ZIP archive without vendor
+        run: |
+          zip -r app.zip . -x "vendor/*" ".git/*" "node_modules/*" "*.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-zip
+          path: app.zip
